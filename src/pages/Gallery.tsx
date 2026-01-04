@@ -1,126 +1,163 @@
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+import { X, ArrowLeft, Image as ImageIcon } from "lucide-react";
 import Layout from "@/components/Layout";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import event1 from "@/assets/event-1.png";
 import event2 from "@/assets/event-2.png";
 import event3 from "@/assets/event-3.png";
 import heroBanner from "@/assets/hero-banner.png";
 
+// 1. DATA: Add 'eventName' to make the section headings pretty
 const galleryImages = [
-  { id: 1, src: event1, title: "Cultural Fest 2024", category: "Dance" },
-  { id: 2, src: event2, title: "Music Night", category: "Music" },
-  { id: 3, src: event3, title: "Art Exhibition", category: "Art" },
-  { id: 4, src: heroBanner, title: "Unity Celebration", category: "Festival" },
-  { id: 5, src: event1, title: "Classical Dance Performance", category: "Dance" },
-  { id: 6, src: event2, title: "Instrumental Evening", category: "Music" },
-  { id: 7, src: event3, title: "Craft Workshop", category: "Art" },
-  { id: 8, src: heroBanner, title: "Diwali Celebration", category: "Festival" },
-  { id: 9, src: event1, title: "Folk Dance Competition", category: "Dance" },
+  // --- Nandotsav 2.0 ---
+  { id: 1, src: event1, title: "Krishna Dance", category: "Dance", eventId: "nandotsav-2", eventName: "Nandotsav 2.0 (2024)" },
+  { id: 2, src: event2, title: "Dahi Handi", category: "Festival", eventId: "nandotsav-2", eventName: "Nandotsav 2.0 (2024)" },
+  { id: 3, src: event3, title: "Crowd Cheers", category: "Crowd", eventId: "nandotsav-2", eventName: "Nandotsav 2.0 (2024)" },
+  
+  // --- Vibrance 2024 ---
+  { id: 4, src: event3, title: "Main Stage", category: "Festival", eventId: "vibrance-2024", eventName: "Vibrance 2024" },
+  { id: 5, src: heroBanner, title: "Opening Ceremony", category: "Festival", eventId: "vibrance-2024", eventName: "Vibrance 2024" },
+  { id: 6, src: event1, title: "DJ Night", category: "Music", eventId: "vibrance-2024", eventName: "Vibrance 2024" },
+  { id: 7, src: event2, title: "Fashion Show", category: "Fashion", eventId: "vibrance-2024", eventName: "Vibrance 2024" },
+
+  // --- Vibnexus ---
+  { id: 8, src: event1, title: "Group Dance", category: "Dance", eventId: "vibnexus-2024", eventName: "Vibnexus '24" },
+  { id: 9, src: event2, title: "Solo Act", category: "Music", eventId: "vibnexus-2024", eventName: "Vibnexus '24" },
 ];
 
-const categories = ["All", "Dance", "Music", "Art", "Festival"];
-
 const Gallery = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterEventId = searchParams.get("event");
   const [selectedImage, setSelectedImage] = useState<typeof galleryImages[0] | null>(null);
 
-  const filteredImages = selectedCategory === "All" 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === selectedCategory);
+  // 2. LOGIC: Group images by their Event Name
+  const groupedImages = useMemo(() => {
+    // If a specific event is selected via URL, filter first
+    const relevantImages = filterEventId 
+      ? galleryImages.filter(img => img.eventId === filterEventId)
+      : galleryImages;
+
+    // Group them: { "Nandotsav": [img1, img2], "Vibrance": [img3, img4] }
+    const groups: Record<string, typeof galleryImages> = {};
+    
+    relevantImages.forEach((img) => {
+      if (!groups[img.eventName]) {
+        groups[img.eventName] = [];
+      }
+      groups[img.eventName].push(img);
+    });
+
+    return groups;
+  }, [filterEventId]);
+
+  const clearFilter = () => setSearchParams({});
 
   return (
     <Layout>
       {/* Hero */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-success/10 to-transparent">
-        <div className="container px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-display text-4xl md:text-6xl text-foreground tracking-wider mb-4">
-              PHOTO <span className="text-success">GALLERY</span>
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Relive the beautiful moments from our past events. 
-              Every picture tells a story of unity, celebration, and cultural pride.
-            </p>
-          </div>
+      <section className="py-16 md:py-24 bg-gradient-to-b from-primary/5 to-transparent">
+        <div className="container px-4 text-center">
+          <h1 className="font-display text-4xl md:text-6xl text-foreground tracking-wider mb-4">
+            PHOTO <span className="text-primary">GALLERY</span>
+          </h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            {filterEventId 
+              ? "Viewing a specific collection. Relive the moments from this event."
+              : "A visual timeline of our journey, captured one frame at a time."}
+          </p>
+          
+          {filterEventId && (
+            <Button variant="outline" onClick={clearFilter} className="mt-6 gap-2">
+              <ArrowLeft className="w-4 h-4" /> Back to All Albums
+            </Button>
+          )}
         </div>
       </section>
 
-      {/* Category Filter */}
-      <section className="py-8 border-b border-border">
-        <div className="container px-4">
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
-                  selectedCategory === category
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
-                )}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Grid */}
-      <section className="py-12 md:py-16">
-        <div className="container px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredImages.map((image, index) => (
-              <div
-                key={image.id}
-                className="relative group cursor-pointer overflow-hidden rounded-xl aspect-square opacity-0 animate-scale-in"
-                style={{ animationDelay: `${index * 50}ms` }}
-                onClick={() => setSelectedImage(image)}
-              >
-                <img
-                  src={image.src}
-                  alt={image.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <span className="text-xs font-medium text-primary">{image.category}</span>
-                  <h3 className="font-display text-lg text-foreground tracking-wider">{image.title}</h3>
-                </div>
+      {/* Gallery Sections */}
+      <div className="container px-4 pb-24 space-y-20">
+        {Object.keys(groupedImages).length > 0 ? (
+          Object.entries(groupedImages).map(([eventName, images], sectionIndex) => (
+            <section key={eventName} className="animate-fade-in" style={{ animationDelay: `${sectionIndex * 100}ms` }}>
+              
+              {/* Section Header */}
+              <div className="flex items-center gap-4 mb-8 border-b border-border/50 pb-4">
+                <h2 className="font-display text-3xl text-foreground">{eventName}</h2>
+                <span className="text-muted-foreground text-sm font-medium px-3 py-1 bg-secondary/10 rounded-full">
+                  {images.length} Photos
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Lightbox */}
+              {/* Grid for this specific event */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {images.map((image, imgIndex) => (
+                  <div
+                    key={image.id}
+                    className="relative group cursor-pointer overflow-hidden rounded-xl aspect-square bg-muted"
+                    onClick={() => setSelectedImage(image)}
+                  >
+                    <img
+                      src={image.src}
+                      alt={image.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                      <span className="text-primary text-xs font-bold uppercase tracking-wider mb-1">
+                        {image.category}
+                      </span>
+                      <p className="text-white font-display text-lg">
+                        {image.title}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))
+        ) : (
+          <div className="text-center py-20 opacity-50">
+            <ImageIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-xl">No photos found for this event.</p>
+            <Button variant="link" onClick={clearFilter} className="mt-2">
+              View all albums
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Lightbox Modal (Same as before) */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
         >
           <button 
-            className="absolute top-4 right-4 p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors"
+            className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
             onClick={() => setSelectedImage(null)}
           >
             <X className="h-6 w-6" />
           </button>
+          
           <div 
-            className="max-w-4xl w-full animate-scale-in"
+            className="max-w-5xl w-full max-h-[90vh] flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
             <img
               src={selectedImage.src}
               alt={selectedImage.title}
-              className="w-full h-auto rounded-xl"
+              className="max-w-full max-h-[80vh] rounded-md shadow-2xl"
             />
-            <div className="mt-4 text-center">
-              <span className="text-sm font-medium text-primary">{selectedImage.category}</span>
-              <h3 className="font-display text-2xl text-foreground tracking-wider mt-1">
+            <div className="mt-6 text-center">
+              <h3 className="text-2xl text-white font-display tracking-wide">
                 {selectedImage.title}
               </h3>
+              <p className="text-white/60 mt-2">
+                {selectedImage.eventName} • {selectedImage.category}
+              </p>
             </div>
           </div>
         </div>

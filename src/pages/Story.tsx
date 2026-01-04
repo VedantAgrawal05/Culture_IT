@@ -1,4 +1,4 @@
-import { Quote } from "lucide-react";
+import { Quote, Sparkles, GraduationCap, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import logoImage from "@/assets/culture-it-logo.png";
@@ -120,6 +120,82 @@ const Story = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* --- NEW SECTION: Faculty Coordinators --- */}
+      <section className="py-16 md:py-24 relative overflow-hidden">
+         {/* Background Decoration */}
+         <div className="absolute right-0 top-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10" />
+
+         <div className="container px-4">
+            <div className="text-center mb-12">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 mb-4">
+                  <Sparkles className="w-4 h-4" />
+                  <span className="text-xs font-medium uppercase tracking-widest">Our Mentors</span>
+               </div>
+               <h2 className="font-display text-3xl md:text-4xl text-foreground tracking-wider">
+                  GUIDING <span className="text-primary">LIGHTS</span>
+               </h2>
+               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+                  The visionary faculty members who provide wisdom, support, and direction to our creative endeavors.
+               </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+               {[
+                  {
+                     name: "Dr. Abishi Chowdhury",
+                     role: "Faculty Coordinator",
+                     school: "School of Computer Science",
+                     color: "from-purple-500/20 to-blue-500/5",
+                     border: "border-purple-500/20",
+                     image: "https://i.pravatar.cc/150?u=abishi" // Replace with real image
+                  },
+                  {
+                     name: "Dr. G Lakshmi Priya",
+                     role: "Faculty Coordinator",
+                     school: "School of Electronics",
+                     color: "from-pink-500/20 to-rose-500/5",
+                     border: "border-pink-500/20",
+                     image: "https://i.pravatar.cc/150?u=lakshmi" // Replace with real image
+                  }
+               ].map((faculty, index) => (
+                  <div 
+                     key={index} 
+                     className={`group relative p-1 rounded-3xl bg-gradient-to-br ${faculty.color} opacity-0 animate-scale-in`}
+                     style={{ animationDelay: `${index * 150}ms` }}
+                  >
+                     <div className="absolute inset-0 bg-white/5 blur-xl group-hover:bg-white/10 transition-colors" />
+                     
+                     <div className={`relative h-full bg-card/80 backdrop-blur-sm rounded-[1.3rem] p-6 flex items-center gap-6 border ${faculty.border}`}>
+                        {/* Image */}
+                        <div className="shrink-0 relative">
+                           <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 shadow-lg">
+                              <img src={faculty.image} alt={faculty.name} className="w-full h-full object-cover" />
+                           </div>
+                           <div className="absolute -bottom-2 -right-2 bg-background p-1.5 rounded-full border border-border">
+                              <Award className="w-5 h-5 text-primary" />
+                           </div>
+                        </div>
+
+                        {/* Text */}
+                        <div>
+                           <h3 className="font-display text-2xl text-foreground leading-tight group-hover:text-primary transition-colors">
+                              {faculty.name}
+                           </h3>
+                           <p className="text-sm font-bold text-accent uppercase tracking-wider mt-1">
+                              {faculty.role}
+                           </p>
+                           <div className="flex items-center gap-1.5 mt-2 text-xs text-muted-foreground">
+                              <GraduationCap className="w-3.5 h-3.5" />
+                              {faculty.school}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
       </section>
 
       {/* Quote */}

@@ -1,181 +1,198 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Briefcase, MapPin, Linkedin } from "lucide-react";
+import { useState } from "react";
+import { MapPin, GraduationCap } from "lucide-react";
 import Layout from "@/components/Layout";
 
+// Updated Data with the specific names provided
 const alumni = [
+  // --- Batch 2024-25 ---
   {
     id: 1,
-    name: "Rohan Mehta",
-    batch: "2020-21",
+    name: "Shatakshi",
+    batch: "2024-25",
     position: "President",
-    currentRole: "Product Manager",
-    company: "Google",
-    location: "Bangalore",
+    location: "Chennai", 
+    image: "https://i.pravatar.cc/150?u=shatakshi",
     color: "bg-primary",
   },
   {
     id: 2,
-    name: "Kavya Iyer",
-    batch: "2020-21",
+    name: "Aanchal",
+    batch: "2024-25",
     position: "Vice President",
-    currentRole: "UX Designer",
-    company: "Microsoft",
-    location: "Hyderabad",
+    location: "Delhi", 
+    image: "https://i.pravatar.cc/150?u=aanchal",
     color: "bg-secondary",
   },
   {
     id: 3,
-    name: "Amit Verma",
-    batch: "2021-22",
-    position: "President",
-    currentRole: "Software Engineer",
-    company: "Amazon",
-    location: "Pune",
+    name: "Charanya Jogi",
+    batch: "2024-25",
+    position: "Gen Sec",
+    location: "Mumbai", 
+    image: "https://i.pravatar.cc/150?u=charanya",
     color: "bg-accent",
   },
+
+  // --- Batch 2023-24 ---
   {
     id: 4,
-    name: "Neha Krishnan",
-    batch: "2021-22",
-    position: "Cultural Head",
-    currentRole: "Marketing Manager",
-    company: "Flipkart",
-    location: "Bangalore",
-    color: "bg-success",
-  },
-  {
-    id: 5,
-    name: "Sanjay Rao",
-    batch: "2022-23",
+    name: "Gargi",
+    batch: "2023-24",
     position: "President",
-    currentRole: "Data Scientist",
-    company: "Netflix",
-    location: "Mumbai",
+    location: "Bangalore", 
+    image: "https://i.pravatar.cc/150?u=gargi",
     color: "bg-primary",
   },
   {
-    id: 6,
-    name: "Riya Desai",
-    batch: "2022-23",
-    position: "Secretary",
-    currentRole: "Business Analyst",
-    company: "Deloitte",
-    location: "Delhi",
+    id: 5,
+    name: "Sohil",
+    batch: "2023-24",
+    position: "Vice President",
+    location: "Hyderabad", 
+    image: "https://i.pravatar.cc/150?u=sohil",
     color: "bg-secondary",
   },
   {
-    id: 7,
-    name: "Karthik Nair",
+    id: 6,
+    name: "Aryan Mani",
     batch: "2023-24",
-    position: "President",
-    currentRole: "Pursuing M.Tech",
-    company: "IIT Bombay",
-    location: "Mumbai",
+    position: "Gen Sec",
+    location: "Pune", 
+    image: "https://i.pravatar.cc/150?u=aryan",
     color: "bg-accent",
+  },
+
+  // --- Batch 2022-23 ---
+  {
+    id: 7,
+    name: "Himanshu Mittal",
+    batch: "2022-23",
+    position: "President",
+    location: "Gurgaon", 
+    image: "https://i.pravatar.cc/150?u=himanshu",
+    color: "bg-primary",
   },
   {
     id: 8,
-    name: "Shreya Agarwal",
-    batch: "2023-24",
-    position: "Events Coordinator",
-    currentRole: "Consultant",
-    company: "McKinsey",
-    location: "Delhi",
-    color: "bg-success",
+    name: "Adrija Ghosh",
+    batch: "2022-23",
+    position: "Vice President",
+    location: "Kolkata", 
+    image: "https://i.pravatar.cc/150?u=adrija",
+    color: "bg-secondary",
   },
 ];
 
-const Alumni = () => {
-  const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('');
-  };
+// Extract unique batches (Sorted newest first)
+const batches = ["All", ...new Set(alumni.map(a => a.batch))].sort().reverse();
 
-  const batches = [...new Set(alumni.map(a => a.batch))].sort().reverse();
+const Alumni = () => {
+  const [selectedBatch, setSelectedBatch] = useState("All");
+
+  const filteredAlumni = selectedBatch === "All" 
+    ? alumni 
+    : alumni.filter(a => a.batch === selectedBatch);
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-accent/10 to-transparent">
-        <div className="container px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-display text-4xl md:text-6xl text-foreground tracking-wider mb-4">
-              OUR <span className="text-accent">ALUMNI</span>
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Celebrating the achievements of our former members who continue to 
-              carry the spirit of Culture-IT in their professional journeys.
-            </p>
+      {/* --- HERO SECTION --- */}
+      <section className="relative py-20 md:py-32 overflow-hidden bg-background">
+        {/* Background Decoration */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="container relative px-4 text-center z-10">
+          <h1 className="font-display text-5xl md:text-7xl text-foreground tracking-tight mb-6">
+            HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">FAME</span>
+          </h1>
+          
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Honoring the leaders and visionaries who built the foundation of <span className="text-foreground font-medium">Culture-IT</span>.
+          </p>
+        </div>
+      </section>
+
+      {/* --- BATCH FILTER --- */}
+      <section className="sticky top-20 z-40 py-4 bg-background/80 backdrop-blur-md border-b border-border/50">
+        <div className="container px-4 overflow-x-auto">
+          <div className="flex justify-center min-w-max gap-2">
+            {batches.map((batch) => (
+              <button
+                key={batch}
+                onClick={() => setSelectedBatch(batch)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+                  selectedBatch === batch
+                    ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/25"
+                    : "bg-card border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                }`}
+              >
+                {batch === "All" ? "All Batches" : `'${batch.split('-')[1]} Batch`}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Alumni by Batch */}
-      {batches.map((batch) => (
-        <section key={batch} className="py-12">
-          <div className="container px-4">
-            <h2 className="font-display text-2xl md:text-3xl text-foreground tracking-wider mb-8">
-              BATCH <span className="text-primary">{batch}</span>
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {alumni.filter(a => a.batch === batch).map((person, index) => (
-                <Card 
-                  key={person.id} 
-                  variant="member"
-                  className="opacity-0 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CardHeader className="text-center pb-4">
-                    <div className={`w-20 h-20 ${person.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
-                      <span className="font-display text-xl text-primary-foreground">
-                        {getInitials(person.name)}
+      {/* --- LEGACY GRID --- */}
+      <section className="py-16 md:py-24">
+        <div className="container px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {filteredAlumni.map((person, index) => (
+              <div 
+                key={person.id}
+                className="group relative opacity-0 animate-scale-in"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                {/* CARD BACKGROUND & GLOW */}
+                <div className={`absolute inset-0 rounded-[2rem] bg-gradient-to-b from-white/5 to-transparent border border-white/10 transition-all duration-500 group-hover:border-primary/30 group-hover:shadow-2xl group-hover:shadow-primary/5`} />
+                
+                <div className="relative p-8 flex flex-col items-center text-center">
+                  
+                  {/* 1. BATCH YEAR WATERMARK (Behind Image) */}
+                  <div className="absolute top-4 text-[5rem] font-display font-bold text-foreground/5 opacity-50 select-none pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                    '{person.batch.split('-')[1]}
+                  </div>
+
+                  {/* 2. PROFILE IMAGE */}
+                  <div className="relative mb-6 mt-4">
+                    {/* Standard uniform glow for everyone */}
+                    <div className="absolute -inset-1 rounded-full opacity-70 blur-md transition-opacity duration-500 group-hover:opacity-100 bg-primary/20" />
+                    
+                    <img 
+                      src={person.image} 
+                      alt={person.name}
+                      className="relative w-28 h-28 rounded-full object-cover border-4 border-background shadow-xl"
+                    />
+                  </div>
+
+                  {/* 3. INFO */}
+                  <div className="space-y-1 relative z-10">
+                    <h3 className="font-display text-2xl text-foreground tracking-wide group-hover:text-primary transition-colors">
+                      {person.name}
+                    </h3>
+                    
+                    <div className="flex items-center justify-center gap-2 text-sm font-medium">
+                      <div className={`w-2 h-2 rounded-full ${person.color}`} />
+                      <span className="text-muted-foreground uppercase tracking-wider text-xs">
+                        {person.position}
                       </span>
                     </div>
-                    <CardTitle className="text-lg text-foreground">{person.name}</CardTitle>
-                    <CardDescription>
-                      <Badge variant="outline" className="mt-1">
-                        {person.position}
-                      </Badge>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Briefcase className="h-4 w-4 text-secondary" />
-                      <span className="text-foreground">{person.currentRole}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground pl-6">{person.company}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="h-4 w-4" />
-                      {person.location}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-      ))}
+                  </div>
 
-      {/* Stay Connected */}
-      <section className="py-16 md:py-24 bg-card/50">
-        <div className="container px-4 text-center">
-          <div className="max-w-2xl mx-auto">
-            <h3 className="font-display text-2xl md:text-3xl text-foreground tracking-wider mb-4">
-              STAY <span className="text-secondary">CONNECTED</span>
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              Are you a Culture-IT alumni? We'd love to hear about your journey and achievements. 
-              Connect with us and inspire the current members!
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              <a 
-                href="#" 
-                className="inline-flex items-center gap-2 px-4 py-2 bg-muted rounded-lg text-foreground hover:bg-muted/80 transition-colors"
-              >
-                <Linkedin className="h-5 w-5 text-secondary" />
-                Join Alumni Network
-              </a>
-            </div>
+                  {/* 4. FOOTER INFO */}
+                  <div className="mt-6 pt-6 border-t border-border/50 w-full flex justify-between items-center text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <GraduationCap className="w-3.5 h-3.5" />
+                      <span>Batch {person.batch}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>{person.location}</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

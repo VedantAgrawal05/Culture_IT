@@ -17,7 +17,7 @@ const Footer = () => {
               <a href="#" className="p-2 rounded-full bg-muted hover:bg-primary hover:text-primary-foreground transition-colors">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href="#" className="p-2 rounded-full bg-muted hover:bg-secondary hover:text-secondary-foreground transition-colors">
+              <a href="https://www.instagram.com/cultureit.vitcc/?hl=en" className="p-2 rounded-full bg-muted hover:bg-secondary hover:text-secondary-foreground transition-colors">
                 <Instagram className="h-4 w-4" />
               </a>
               <a href="#" className="p-2 rounded-full bg-muted hover:bg-accent hover:text-accent-foreground transition-colors">
@@ -44,15 +44,15 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>College Campus, Main Building</span>
+                <span>VIT Chennai,Tamil Nadu  – 600127</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-secondary" />
-                <span>cultureit@college.edu</span>
+                <span>cultureitvit@gmail.com</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-accent" />
-                <span>+91 98765 43210</span>
+                <span>+91 62630 67328</span>
               </div>
             </div>
           </div>
